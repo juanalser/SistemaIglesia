@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Juan Garcia\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Juan Garcia\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Juan Garcia\Tareaiglesia\Backup\Tareaiglesia" t="IncludeRecursive">
+      <e p="_Imports.razor" t="Include" />
+      <e p="app.db" t="Include" />
+      <e p="App.razor" t="Include" />
+      <e p="appsettings.Development.json" t="Include" />
+      <e p="appsettings.json" t="Include" />
+      <e p="Areas" t="Include">
+        <e p="Identity" t="Include">
+          <e p="Data" t="Include">
+            <e p="ApplicationDbContext.cs" t="Include" />
+          </e>
+          <e p="IdentityHostingStartup.cs" t="Include" />
+          <e p="Pages" t="Include">
+            <e p="_ViewImports.cshtml" t="Include" />
+            <e p="_ViewStart.cshtml" t="Include" />
+            <e p="Account" t="Include">
+              <e p="_ViewImports.cshtml" t="Include" />
+              <e p="Login.cshtml" t="Include" />
+              <e p="Login.cshtml.cs" t="Include" />
+              <e p="LogOut.cshtml" t="Include" />
+              <e p="Manage" t="Include">
+                <e p="_Layout.cshtml" t="Include" />
+                <e p="_ManageNav.cshtml" t="Include" />
+                <e p="_ViewImports.cshtml" t="Include" />
+                <e p="Index.cshtml" t="Include" />
+                <e p="Index.cshtml.cs" t="Include" />
+                <e p="ManageNavPages.cs" t="Include" />
+                <e p="PersonalData.cshtml" t="Include" />
+                <e p="PersonalData.cshtml.cs" t="Include" />
+              </e>
+              <e p="Register.cshtml" t="Include" />
+              <e p="Register.cshtml.cs" t="Include" />
+            </e>
+            <e p="Shared" t="Include">
+              <e p="_LoginPartial.cshtml" t="Include" />
+            </e>
+          </e>
+          <e p="RevalidatingIdentityAuthenticationStateProvider.cs" t="Include" />
+        </e>
+      </e>
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="Componentes" t="Include">
+        <e p="DatosAcademicos.razor" t="Include" />
+        <e p="DatosEclesiaticos.razor" t="Include" />
+        <e p="DatosFamiliares.razor" t="Include" />
+        <e p="DatosIglesia.razor" t="Include" />
+        <e p="DatosLaborales.razor" t="Include" />
+        <e p="DatosPersonales.razor" t="Include" />
+        <e p="Modal.razor" t="Include" />
+        <e p="PrincipalModal.razor" t="Include" />
+        <e p="PrincipalUser.razor" t="Include" />
+      </e>
+      <e p="Data" t="Include">
+        <e p="ApplicationDbContext.cs" t="Include" />
+        <e p="WeatherForecast.cs" t="Include" />
+        <e p="WeatherForecastService.cs" t="Include" />
+      </e>
+      <e p="Migrations" t="Include">
+        <e p="20201204183400_InitialCreate.cs" t="Include" />
+        <e p="20201204183400_InitialCreate.Designer.cs" t="Include" />
+        <e p="ApplicationDbContextModelSnapshot.cs" t="Include" />
+      </e>
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="TareaIglesia.AssemblyInfo.cs" t="Include" />
+            <e p="TareaIglesia.RazorAssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="obj.rar" t="Include" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Pages" t="Include">
+        <e p="_Host.cshtml" t="Include" />
+        <e p="_ViewImports.cshtml" t="Include" />
+        <e p="_ViewStart.cshtml" t="Include" />
+        <e p="Counter.razor" t="Include" />
+        <e p="EdForm.razor" t="Include" />
+        <e p="Error.cshtml" t="Include" />
+        <e p="FetchData.razor" t="Include" />
+        <e p="Form.razor" t="Include" />
+        <e p="Index.razor" t="Include" />
+        <e p="Shared" t="Include">
+          <e p="_Layout.cshtml" t="Include" />
+          <e p="_LoginPartial.cshtml" t="Include" />
+          <e p="_ValidationScriptsPartial.cshtml" t="Include" />
+        </e>
+      </e>
+      <e p="Program.cs" t="Include" />
+      <e p="Properties" t="Include">
+        <e p="launchSettings.json" t="Include" />
+        <e p="PublishProfiles" t="Include">
+          <e p="IISProfile.pubxml" t="Include" />
+        </e>
+      </e>
+      <e p="ScaffoldingReadMe.txt" t="Include" />
+      <e p="Services" t="Include">
+        <e p="IglesiaServices.cs" t="Include" />
+      </e>
+      <e p="Shared" t="Include">
+        <e p="LoginDisplay.razor" t="Include" />
+        <e p="MainLayout.razor" t="Include" />
+        <e p="NavMenu.razor" t="Include" />
+        <e p="SurveyPrompt.razor" t="Include" />
+      </e>
+      <e p="Startup.cs" t="Include" />
+      <e p="TareaIglesia.csproj" t="IncludeRecursive" />
+      <e p="wwwroot" t="Include">
+        <e p="css" t="Include">
+          <e p="bootstrap" t="Include">
+            <e p="bootstrap.min.css" t="Include" />
+            <e p="bootstrap.min.css.map" t="Include" />
+          </e>
+          <e p="open-iconic" t="Include">
+            <e p="font" t="Include">
+              <e p="css" t="Include">
+                <e p="open-iconic-bootstrap.min.css" t="Include" />
+              </e>
+              <e p="fonts" t="Include">
+                <e p="open-iconic.eot" t="Include" />
+                <e p="open-iconic.otf" t="Include" />
+                <e p="open-iconic.svg" t="Include" />
+                <e p="open-iconic.ttf" t="Include" />
+                <e p="open-iconic.woff" t="Include" />
+              </e>
+            </e>
+            <e p="FONT-LICENSE" t="Include" />
+            <e p="ICON-LICENSE" t="Include" />
+            <e p="README.md" t="Include" />
+          </e>
+          <e p="site.css" t="Include" />
+        </e>
+        <e p="depositphotos_87264650-stock-illustration-church-logo-cross-and-bible.jpg" t="Include" />
+        <e p="descarga (1).png" t="Include" />
+        <e p="descarga (2).png" t="Include" />
+        <e p="favicon.ico" t="Include" />
+        <e p="images.png" t="Include" />
+        <e p="js" t="Include">
+          <e p="inputfile.js" t="Include" />
+        </e>
+        <e p="kisspng-cross-and-flame-methodism-united-methodist-church-flame-5ad370816366f7.1108986915238063374072.jpg" t="Include" />
+        <e p="kisspng-login-computer-icons-iconfinder-website-login-key-icon-lock-locked-login-5ab05c95da2c58.5667862415215074778937.jpg" t="Include" />
+        <e p="login_door-512.png" t="Include" />
+      </e>
+    </e>
+  </component>
+</project>

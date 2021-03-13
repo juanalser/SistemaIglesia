@@ -1,0 +1,103 @@
+﻿<h3>DatosFamiliares</h3>
+@using TareaIglesia.Services
+@inject IglesiaServices service
+@inject HttpClient client
+@using Newtonsoft.Json;
+<form>
+    <li class="form-line" data-type="control_dropdown">
+        <label>Estado Civil</label>
+        <br />
+        <label>
+            <input type="radio" value="Si" name="a"
+                   checked="@(EstadoCiv == "Soltero")"
+                   @onclick="@(() => EstadoCiv = "Soltero")" />Soltero
+        </label>
+        <label>
+            <label>
+                <input type="radio" value="Si" name="a"
+                       checked="@(EstadoCiv == "Casado")"
+                       @onclick="@(() => EstadoCiv = "Casado")" />Casado
+            </label>
+
+            @if (EstadoCiv == "Soltero")
+            {
+                <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+                iglesiahermano.EstadoCivil = "Soltero";
+            }
+            @if (EstadoCiv == "Casado")
+            {
+                <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+                iglesiahermano.EstadoCivil = "Casado";
+                <br />
+                <br />
+                <label>Nombre de esposo</label>
+                <input type="text" @bind="iglesiahermano.NombreEsposo" name="fecha" id="fecha" class="form-control">
+
+            }
+        </label>
+    </li>
+
+
+    <li class="form-line" data-type="control_dropdown">
+        <label>
+            <input type="radio" name="group"
+                   checked="@(Hijos == "Si")"
+                   @onclick="@(() => Hijos = "Si")" />Si
+        </label>
+        <label>
+            <label>
+                <input type="radio" name="group"
+                       checked="@(Hijos == "No")"
+                       @onclick="@(() => Hijos = "No")" />No
+            </label>
+
+            @if (Hijos == "Si")
+            {
+
+                <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                iglesiahermano.Hijos = "Si";
+
+
+                <label>Numero de hijos</label>
+                <input type="text" @bind="iglesiahermano.NoHijos" class="form-control">
+            }
+            @if (Hijos == "No")
+            {
+                <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                iglesiahermano.Hijos = "No";
+
+
+
+            }
+        </label>
+
+        <div class="text-center p-3 mb-3">
+            <button class="btn btn-info" @onclick="AddNewHermano"> Agregar Persona</button>
+        </div>
+
+    </li>
+</form>
+
+@code {
+    string EstadoCiv;
+    string Hijos;
+    List<Iglesia> iglesia = new List<Iglesia>();
+
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refreshiglesia();
+    }
+    private async Task Refreshiglesia()
+    {
+        iglesia = await service.GetHermanoAsync();
+    }
+
+    private async Task AddNewHermano()
+    {
+        await service.AddHermanoAsync(iglesiahermano);
+        iglesiahermano = new Iglesia();
+        await Refreshiglesia();
+    }
+}

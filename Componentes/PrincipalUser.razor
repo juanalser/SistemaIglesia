@@ -1,0 +1,85 @@
+﻿<h3>Principaluser</h3>
+@page "/principaluser"
+@using TareaIglesia.Data;
+
+@inject Services.IglesiaServices service
+
+<div class="container">
+
+    <div class="row bg-light">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>IDUser</th>
+                    <th>Email</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Pais</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (iglesia.Any())
+                {
+                    @foreach (var hermano in iglesia)
+                    {
+                <tr>
+                    <td>@hermano.HermanoID</td>
+                    <td>@hermano.Email</td>
+                    <td>@hermano.Nombre</td>
+                    <td>@hermano.Apellido</td>
+                    <td>@hermano.FechaDeNacimiento</td>
+                    <td>@hermano.PaisActual</td>
+                    <button @onclick="(() => SetHermanoForUpdate(hermano))"></button>
+                    <td><button class="btn btn-danger" @onclick="(() => DeleteProduct(hermano))">Delete</button></td>
+                </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="6"><strong>No products available</strong></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+    List<Iglesia> iglesia = new List<Iglesia>();
+    protected override async Task OnInitializedAsync()
+    {
+        await Refreshiglesia();
+    }
+
+    private async Task Refreshiglesia()
+    {
+        iglesia = await service.GetHermanoAsync();
+    }
+
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+    private async Task AddNewHermano()
+    {
+        await service.AddHermanoAsync(iglesiahermano);
+        iglesiahermano = new Iglesia();
+        await Refreshiglesia();
+    }
+
+    Iglesia UpdateIglesia = new Iglesia();
+    private void SetHermanoForUpdate(Iglesia product)
+    {
+        UpdateIglesia = iglesiahermano;
+    }
+
+    private async Task UpdateHermanoForData()
+    {
+        await service.UpdateHermanoAsync(UpdateIglesia);
+        await Refreshiglesia();
+    }
+
+    private async Task DeleteProduct(Iglesia iglesia)
+    {
+        await service.DeleteHermanoAsync(iglesia);
+        await Refreshiglesia();
+    }
+}

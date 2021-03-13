@@ -1,0 +1,364 @@
+﻿@page "/Modal"
+
+
+@using TareaIglesia.Data
+@using Newtonsoft.Json;
+@using TareaIglesia.Services
+@inject IglesiaServices service
+@inject HttpClient client
+
+<div class="modal fade" id="@(Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                div class="d-flex justify-content-between">
+                <button @onclick="viewDetails" class="btn btn-link">Detalles</button>
+                <button @onclick="viewMaps" class="btn btn-link">Mapa</button>
+                <button @onclick="viewImages" class="btn btn-link">Imagen de Referencia</button>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div>
+                @if (details)
+                {
+                    <form>
+
+                        <h2 id="header_3" class="form-header" data-component="header">
+                            Datos Personales
+                        </h2>
+                        
+                            <div class="form-line" data-type="control_dropdown">
+                                <label>Apellidos</label>
+                                <br />
+                                <input type="text" name="Apellido" id="Apellido" @bind="iglesiahermano.Apellido" class="form-control">
+                            </div>
+                            <div class="form-line" data-type="control_dropdown">
+                                <label>Nombres</label>
+                                <br />
+                                <input type="text" name="Nombre" id="Nombre" @bind="iglesiahermano.Nombre" class="form-control">
+                            </div>
+
+                        
+
+                        <div class="form-line" data-type="control_dropdown">
+                            <label>Sexo</label>
+                            <label>
+                                <input type="radio" value="Si" name="group"
+                                       checked="@(Sexo == "Hombre")"
+                                       @onclick="@(() => Sexo = "Hombre")" />Hombre
+                            </label>
+                            <label>
+                                <label>
+                                    <input type="radio" value="Si" name="group"
+                                           checked="@(Sexo == "Mujer")"
+                                           @onclick="@(() => Sexo = "Mujer")" />Mujer
+                                </label>
+
+                                @if (Sexo == "Hombre")
+                                {
+                                    <input @bind="iglesiahermano.Sexo" style="visibility:hidden" />
+                                    iglesiahermano.Sexo = "Hombre";
+                                }
+                                @if (Sexo == "Mujer")
+                                {
+                                    <input @bind="iglesiahermano.Sexo" style="visibility:hidden" />
+                                    iglesiahermano.Sexo = "Hombre";
+                                }
+                            </label>
+                        </div>
+                        <div class="form-line" data-type="control_dropdown">
+                            <label>Fecha de Nacimiento</label>
+                            <input required type="date" @bind="iglesiahermano.FechaDeNacimiento" @onclick="GetUser" name="fecha" id="fecha" class="form-control">
+                        </div>
+                        <div class="form-line" data-type="control_dropdown">
+                            <br />
+                            <label>Pais de Nacimiento</label>
+                            <br />
+                            <select class="form-control" @bind="iglesiahermano.PaisNacimiento">
+                                <option> --Selecciona--</option>
+                                @foreach (var user in Users)
+                                {
+
+                                    <option value="@user.name">@user.name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-line" data-type="control_dropdown">
+                            <label> Ciudad de Nacimiento </label>
+                            <br />
+                            <input required type="text" @bind="iglesiahermano.CiudadNacimiento" id="input_8" name="q8_ciudadDe" data-type="input-textbox" class="form-textbox" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_8" />
+                        </div>
+                        <div class="form-line" data-type="control_dropdown">
+                            <div id="cid_9" class="form-input" data-layout="half">
+                                <label>Pais de residencia actual</label>
+                                <br />
+                                <select class="form-control" @bind="iglesiahermano.PaisActual">
+                                    <option> --Selecciona--</option>
+                                    @foreach (var user in Users)
+                                    {
+                                        <option value="@user.name">@user.name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_textbox">
+                            <label class="form-label form-label-right form-label-auto" id="label_10" for="input_10"> Ciudad de residencia actual </label>
+                            <div id="cid_10" class="form-input" data-layout="half">
+                                <input type="text" id="input_10" @bind="iglesiahermano.CiudadActual" name="q10_ciudadDe10" data-type="input-textbox" class="form-textbox" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_10" />
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_textarea">
+                            <label> Dirección (Provincia / sector / calle / No. de vivienda) </label>
+                            <div id="cid_11" class="form-input" data-layout="full">
+                                <textarea class="form-textarea" @bind="iglesiahermano.Direccion" style="width:648px;height:163px" data-component="textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_textbox">
+                            <label> Teléfono: </label>
+                            <div class="form-input" data-layout="half">
+                                <input type="text" @bind="iglesiahermano.Telefono" class="form-textbox" style="width:310px" size="310" data-component="textbox" />
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_textbox">
+                            <label class="form-label form-label-right form-label-auto"> Celular: </label>
+                            <div class="form-input" data-layout="half">
+                                <input type="text" @bind="iglesiahermano.Celular" data-type="input-textbox" class="form-textbox" style="width:310px" size="310" data-component="textbox" />
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_textbox">
+                            <label class="form-label form-label-right form-label-auto"> Correo electrónico: </label>
+                            <div class="form-input" data-layout="half">
+                                <input type="text" @bind="iglesiahermano.Email" data-type="input-textbox" class="form-textbox" style="width:310px" size="310" data-component="textbox" />
+                            </div>
+                        </div>
+                        <div class="form-line" data-type="control_radio">
+                            <label class="form-label form-label-right form-label-auto"> Tipo de Documento de identidad: </label>
+                            <div class="form-input" data-layout="full">
+                                <div class="form-single-column" role="group" data-component="radio">
+                                    <label>
+                                        <input type="radio" value="Si" name="group"
+                                               checked="@(TpDocumento == "Cédula")"
+                                               @onclick="@(() => TpDocumento = "Cédula")" />Cédula
+                                    </label>
+                                    <label>
+                                        <input type="radio" value="Si" name="group"
+                                               checked="@(TpDocumento == "Pasaporte")"
+                                               @onclick="@(() => TpDocumento = "Pasaporte")" />Pasaporte
+                                    </label>
+                                    <label>
+                                        <input type="radio" value="Si" name="group"
+                                               checked="@(TpDocumento == "DNI")"
+                                               @onclick="@(() => TpDocumento = "DNI")" />DNI
+
+                                        @if (TpDocumento == "Cédula")
+                                        {
+                                            iglesiahermano.TipoDocumentoIDentidad = "Cédula";
+                                        }
+                                        @if (TpDocumento == "Pasaporte")
+                                        {
+                                            iglesiahermano.Sexo = "Pasaporte";
+                                        }
+                                        @if (TpDocumento == "DNI")
+                                        {
+                                            iglesiahermano.Sexo = "DNI";
+                                        }
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center p-3 mb-3">
+                            <button class="btn btn-info" @onclick="AddNewHermano"> Agregar Persona</button>
+                        </div>
+
+                    </form>
+                }
+                @if (maps)
+                {
+                    <form>
+                        <div class="form-line" data-type="control_dropdown">
+                            <label>Estado Civil</label>
+                            <br />
+                            <label>
+                                <input type="radio" value="Si" name="a"
+                                       checked="@(EstadoCiv == "Soltero")"
+                                       @onclick="@(() => EstadoCiv = "Soltero")" />Soltero
+                            </label>
+                            <label>
+                                <label>
+                                    <input type="radio" value="Si" name="a"
+                                           checked="@(EstadoCiv == "Casado")"
+                                           @onclick="@(() => EstadoCiv = "Casado")" />Casado
+                                </label>
+
+                                @if (EstadoCiv == "Soltero")
+                                {
+                                    <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+                                    iglesiahermano.EstadoCivil = "Soltero";
+                                }
+                                @if (EstadoCiv == "Casado")
+                                {
+                                    <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+                                    iglesiahermano.EstadoCivil = "Casado";
+                                    <br />
+                                    <br />
+                                    <label>Nombre de esposo</label>
+                                    <input type="text" @bind="iglesiahermano.NombreEsposo" name="fecha" id="fecha" class="form-control">
+
+                                }
+                            </label>
+                        </div>
+
+
+                        <div class="form-line" data-type="control_dropdown">
+                            <label>
+                                <input type="radio" name="group"
+                                       checked="@(Hijos == "Si")"
+                                       @onclick="@(() => Hijos = "Si")" />Si
+                            </label>
+                            <label>
+                                <label>
+                                    <input type="radio" name="group"
+                                           checked="@(Hijos == "No")"
+                                           @onclick="@(() => Hijos = "No")" />No
+                                </label>
+
+                                @if (Hijos == "Si")
+                                {
+
+                                    <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                                    iglesiahermano.Hijos = "Si";
+
+
+                                    <label>Numero de hijos</label>
+                                    <input type="text" @bind="iglesiahermano.NoHijos" class="form-control">
+                                }
+                                @if (Hijos == "No")
+                                {
+                                    <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                                    iglesiahermano.Hijos = "No";
+
+
+
+                                }
+                            </label>
+
+                            <div class="text-center p-3 mb-3">
+                                <button class="btn btn-info" @onclick="AddNewHermano"> Agregar Persona</button>
+                            </div>
+
+                        </div>
+                    </form>
+                }
+                @if (images)
+                {
+
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+    [Parameter]
+    public Iglesia ts { get; set; }
+
+
+    private void viewDetails()
+    {
+        details = true;
+        maps = false;
+        images = false;
+    }
+    private void viewMaps()
+    {
+        details = false;
+        maps = true;
+        images = false;
+    }
+    private void viewImages()
+    {
+        details = false;
+        maps = false;
+        images = true;
+    }
+
+
+
+
+    string EstadoCiv;
+    string Hijos;
+
+    private bool details = true;
+    private bool maps = false;
+    private bool images = false;
+
+
+    //Llenar select
+    List<Content> Users = new List<Content>();
+
+    private async void GetUser()
+    {
+        var apiName = "https://raw.githubusercontent.com/millan2993/countries/master/json/countries.json";
+        var httpResponse = await client.GetAsync(apiName);
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            Response responseData = JsonConvert.DeserializeObject<Response>(await httpResponse.Content.ReadAsStringAsync());
+            Users = responseData.countries;
+            StateHasChanged();
+        }
+    }
+
+    public class Content
+    {
+        [JsonProperty("id")]
+        public string id { get; set; } = "";
+        [JsonProperty("name")]
+        public string name { get; set; } = "";
+    }
+    public class Response
+    {
+        [JsonProperty("countries")]
+        public List<Content> countries { get; set; }
+
+
+    }
+    //
+    List<Iglesia> iglesia = new List<Iglesia>();
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+
+    string Sexo;
+    string TpDocumento;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refreshiglesia();
+    }
+    private async Task Refreshiglesia()
+    {
+        iglesia = await service.GetHermanoAsync();
+    }
+
+    private async Task AddNewHermano()
+    {
+        await service.AddHermanoAsync(iglesiahermano);
+        iglesiahermano = new Iglesia();
+        await Refreshiglesia();
+    }
+
+}
+

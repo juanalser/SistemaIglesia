@@ -1,0 +1,182 @@
+﻿@page "/Formulario"
+
+@using TareaIglesia.Services
+@using TareaIglesia.Data;
+@inject IglesiaServices service
+@inject HttpClient client
+@inject IJSRuntime JSruntime
+@using Newtonsoft.Json;
+@using TareaIglesia.Componentes
+
+<AuthorizeView>
+    <Authorized>
+        <h2 id="header_3" class="form-check card-header text-center" data-component="header">
+            Formulario
+        </h2>
+        <div class="text-center">
+            <NavLink href="Form">
+                <button class="form-control" type="button"> Ingresar Hermano</button>
+            </NavLink>
+        </div>
+        <br />
+        <label class="text-black-50"> Buscar</label>
+        <input type="search" @bind="Filter"
+               @bind:event="oninput" />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+
+                    <th>Fecha</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (iglesia.Count > 0)
+                {
+                    @foreach (Iglesia T in iglesia)
+                    {
+                        if (!IsVisible(T))
+                            continue;
+                        @if (T.foto != null)
+                        {
+
+                            <tr>
+                                <td><img src=@string.Format("data:image/jpg;base64, {0}", Convert.ToBase64String(getImage(Convert.ToBase64String(T.foto)))) width="80" height="90" /></td>
+                                <td>@T.Nombre</td>
+                                <td>@T.Apellido</td>
+
+                                <td>@T.FechaDeNacimiento.Day / @T.FechaDeNacimiento.Month/ @T.FechaDeNacimiento.Year</td>
+                                <td><a href="/EdForm/@T.HermanoID" @onclick="(() => SetHermanoUpdate(T))"><i>Editar</i></a></td>
+                                <td><button class="bg-danger" @onclick="(() => DeleteHermano(T))">X</button></td>
+                            </tr>
+
+                        }
+
+                    }
+                }
+
+            </tbody>
+        </table>
+
+
+    </Authorized>
+    <NotAuthorized>
+
+
+        <h3 class="text-black-50 text-center">Bienvenido</h3>
+        <p class="text-center">Para poder visualizar el contenido debe de<a href="Identity/Account/Login"> iniciar sesion</a> o si no dispones de una cuenta puedes registrarte en <a href="Identity/Account/Register"> este enlace</a></p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    public string Filter { get; set; }
+
+    string NombrePersona = string.Empty;
+    List<Iglesia> iglesia = new List<Iglesia>();
+
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await Refreshiglesia();
+    }
+    private async Task Refreshiglesia()
+    {
+        iglesia = await service.GetHermanoAsync();
+    }
+
+    Iglesia iglesiaupdt = new Iglesia();
+    private void SetHermanoUpdate(Iglesia iglesia)
+    {
+        iglesiaupdt = iglesia;
+    }
+    private async Task UpdateProductData()
+    {
+
+        await service.UpdateHermanoAsync(iglesiaupdt);
+        await Refreshiglesia();
+    }
+    private async Task DeleteHermano(Iglesia iglesia)
+    {
+        if (await JSruntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar este hermano"))
+        {
+            await service.DeleteHermanoAsync(iglesia);
+            await Refreshiglesia();
+        }
+
+    }
+
+    private async Task ListarHermano()
+    {
+        await service.ListarHermanosAsync(NombrePersona);
+        await Refreshiglesia();
+    }
+
+
+    public byte[] getImage(string sBase64String)
+    {
+        byte[] bytes = null;
+        if (sBase64String != null)
+        {
+            bytes = Convert.FromBase64String(sBase64String);
+        }
+
+        return bytes;
+    }
+
+    public bool IsVisible(Iglesia iglesia)
+    {
+        if (string.IsNullOrEmpty(Filter))
+            return true;
+
+
+
+        if (iglesia.HermanoID.ToString().StartsWith(Filter) || iglesia.Nombre.ToString().StartsWith(Filter))
+            return true;
+
+        return false;
+    }
+
+    /*
+        [Parameter]
+        public Guid Uid { get; set; }
+        [Parameter]
+        public EventCallback ChangeRL { get; set; }
+
+
+
+        Iglesia ModalT = new Iglesia();
+
+        private string modalId = "CrudModal";
+
+
+        private void SetModal(Iglesia t)
+        {
+            ModalT = t;
+        }
+        protected override async Task OnParametersSetAsync()
+        {
+            await Load();
+            StateHasChanged();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            //if(firstRender)
+            StateHasChanged();
+            await Load();
+        }
+
+        private async Task Load()
+        {
+            if (Uid != null)
+                iglesia = iglesia = await service.GetHermanoAsync();
+        }
+    */
+}
+

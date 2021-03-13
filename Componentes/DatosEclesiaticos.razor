@@ -1,0 +1,345 @@
+﻿<h3>DatosEclesiaticos</h3>
+<form>
+    <li class="form-line" data-type="control_dropdown">
+        <label>Fecha de conversión</label>
+        <input type="date" @bind="iglesiahermano.FechaDeConversion" name="fecha" id="fecha" class="form-control">
+
+
+        <label>Fecha de bautismo</label>
+        <input type="date" @bind="iglesiahermano.Fechabautismo" name="fecha" id="fecha" class="form-control">
+
+        <label>Fecha en que	fue	aceptado(a) formalmente	como miembro de la Iglesia:</label>
+        <input type="date" @bind="iglesiahermano.FechaAceptmiembro" name="fecha" id="fecha" class="form-control">
+
+    </li>
+
+    <li class="form-line" data-type="control_dropdown">
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Bautista")"
+                   @onclick="@(() => denominacion = "Bautista")" />Bautista
+        </label>
+
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Pentecostal")"
+                   @onclick="@(() => denominacion = "Pentecostal")" />Pentecostal
+        </label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Metodista")"
+                   @onclick="@(() => denominacion = "Metodista")" />Metodista
+        </label>
+
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Católica")"
+                   @onclick="@(() => denominacion = "Católica")" />Católica
+        </label>
+
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Presbiteriana")"
+                   @onclick="@(() => denominacion = "Presbiteriana")" />Presbiteriana
+        </label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Adventista")"
+                   @onclick="@(() => denominacion = "Adventista")" />Adventista
+        </label>
+
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Templo Bíblico")"
+                   @onclick="@(() => denominacion = "Templo Bíblico")" />Templo Bíblico
+        </label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Menonita")"
+                   @onclick="@(() => denominacion = "Menonita")" />Menonita
+        </label>
+
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Luterana")"
+                   @onclick="@(() => denominacion = "Luterana")" />Luterana
+        </label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Otra")"
+                   @onclick="@(() => denominacion = "Otra")" />Otra
+        </label>
+
+        @if (denominacion == "Bautista")
+        {
+            iglesiahermano.Hijos = "Bautista";
+        }
+        @if (denominacion == "Pentecostal")
+        {
+            iglesiahermano.Hijos = "Pentecostal";
+        }
+
+        @if (denominacion == "Metodista")
+        {
+            iglesiahermano.Hijos = "Metodista";
+        }
+        @if (denominacion == "Católica")
+        {
+            iglesiahermano.Hijos = "Católica";
+        }
+
+        @if (denominacion == "Menonita")
+        {
+            iglesiahermano.Hijos = "Menonita";
+        }
+        @if (denominacion == "Presbiteriana")
+        {
+            iglesiahermano.Hijos = "Presbiteriana";
+        }
+
+        @if (denominacion == "Luterana")
+        {
+            iglesiahermano.Hijos = "Luterana";
+        }
+        @if (denominacion == "Adventista")
+        {
+            iglesiahermano.Hijos = "Adventista";
+        }
+
+        @if (denominacion == "Templo Bíblico")
+        {
+            iglesiahermano.Hijos = "Templo Bíblico";
+        }
+        @if (denominacion == "Otra")
+        {
+            <label>Otra:</label>
+            <input type="text" @bind="iglesiahermano.NoHijos" class="form-control">
+            iglesiahermano.Hijos = "Otra";
+        }
+
+        <br />
+    </li>
+
+    <div>
+
+        <label>Nombre de la iglesia a la que asiste acutalmente</label>
+        <input type="text" @bind="iglesiahermano.NombreIglesia" class="form-control">
+        <br />
+
+        <label>Si asiste a esta iglesia por un tiempo menor a un año, ¿Dónde se congregaba antes?</label>
+        <input type="text" @bind="iglesiahermano.IglesiaAnterior" class="form-control">
+        <br />
+
+        <label>Nombre del pastor de su iglesia actual</label>
+        <input type="text" @bind="iglesiahermano.Pastor" class="form-control">
+        <br />
+    </div>
+    <div>
+        <label>¿Ha sido disciplinado alguna vez?   </label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Si")"
+                   @onclick="@(() => denominacion = "Si")" />Si
+        </label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "No")"
+                   @onclick="@(() => denominacion = "No")" />No
+        </label>
+        @if (denominacion == "Si")
+        {
+            <label>¿Cuantas veces?</label>
+            <input type="text" @bind="iglesiahermano.Disciplina" class="form-control">
+
+            iglesiahermano.Hijos = "Si";
+        }
+        @if (denominacion == "No")
+        {
+            iglesiahermano.Hijos = "No";
+        }
+
+
+        <input required type="text" class="form-control">
+        <br />
+        <label>Causas: </label>
+        <input type="text" @bind="iglesiahermano.CausasDisciplina" class="form-control">
+        <br />
+
+    </div>
+    <div>
+        <label>Denominacion a la que pertenece</label>
+        <br />
+        <input class="form-radio validate[required]" id="input_5_1" name="q5_sexo" value="Mujer" required type="radio" />
+        <label>Pastor</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Pastor")"
+                   @onclick="@(() => denominacion = "Pastor")" />Pastor
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Anciano</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Anciano")"
+                   @onclick="@(() => denominacion = "Anciano")" />Anciano
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Diacono</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Diacono")"
+                   @onclick="@(() => denominacion = "Diacono")" />Diacono
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Misionero</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Misionero")"
+                   @onclick="@(() => denominacion = "Misionero")" />Misionero
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Escuela Dominical </label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Escuela Dominical")"
+                   @onclick="@(() => denominacion = "Lider Escuela Dominical")" />Lider Escuela Dominical
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Minist. de Jovenes</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Minist. de Jovenes")"
+                   @onclick="@(() => denominacion = "Lider Minist. de Jovenes")" />Lider Minist. de Jovenes
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Minist. de Caballeros</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Minist. de Caballeros")"
+                   @onclick="@(() => denominacion = "Lider Minist. de Caballeros")" />Lider Minist. de Caballeros
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Minist. de Damas</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Minist. de Damas")"
+                   @onclick="@(() => denominacion = "Lider Minist. de Damas")" />Lider Minist. de Damas
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Minist. de Niños</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Minist. de Niños")"
+                   @onclick="@(() => denominacion = "Lider Minist. de Niños")" />Lider Minist. de Niños
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider Minist. de matrimonios</label>
+        <br />
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider Minist. de matrimonios")"
+                   @onclick="@(() => denominacion = "Lider Minist. de matrimonios")" />Lider Minist. de matrimonios
+        </label>
+        <input class="form-radio validate[required]" id="input_5_0" name="q5_sexo" value="Hombre" required type="radio" />
+        <label>Lider de grupo pequeño (Célula)</label>
+        <label>
+            <input type="radio" name="group"
+                   checked="@(denominacion == "Lider de grupo pequeño (Célula)")"
+                   @onclick="@(() => denominacion = "Lider de grupo pequeño (Célula)")" />Lider de grupo pequeño (Célula)
+        </label>
+
+        @if (denominacion == "Pastor")
+        {
+            iglesiahermano.Hijos = "Pastor";
+        }
+
+        @if (denominacion == "Anciano")
+        {
+            iglesiahermano.Hijos = "Anciano";
+        }
+
+        @if (denominacion == "Diacono")
+        {
+            iglesiahermano.Hijos = "Diacono";
+        }
+
+        @if (denominacion == "Misionero")
+        {
+            iglesiahermano.Hijos = "Misionero";
+        }
+
+        @if (denominacion == "Lider Escuela Dominical")
+        {
+            iglesiahermano.Hijos = "Lider Escuela Dominical";
+        }
+
+        @if (denominacion == "Lider Minist. de Jovenes")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de Jovenes";
+        }
+
+        @if (denominacion == "Lider Minist. de Caballeros")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de Caballeros";
+        }
+
+        @if (denominacion == "Lider Minist. de Damas")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de Damas";
+        }
+
+        @if (denominacion == "Lider Minist. de Niños")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de Niños";
+        }
+
+        @if (denominacion == "Lider Minist. de matrimonios")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de matrimonios";
+        }
+
+        @if (denominacion == "Lider de grupo pequeño (Célula)")
+        {
+            iglesiahermano.Hijos = "Lider Minist. de matrimonios";
+        }
+
+    </div>
+
+    <div>
+        <label>¿Cuáles son los ministerios en los que ha servido?</label>
+        <input type="text" @bind="iglesiahermano.Ministerios" name="fecha" id="fecha" class="form-control">
+        <br />
+        <label>¿En cuál de estos ministerios considera que tuvo mayor fruto? ¿Por qué?</label>
+        <input type="text" @bind="iglesiahermano.MinisteriosFruto" name="fecha" id="fecha" class="form-control">
+        <br />
+        <label>Considerando sus dones y talentos, ¿a qué ministerio cree usted que Dios lo(a) está llamando?</label>
+        <input type="text" @bind="iglesiahermano.MinisterioDios" name="fecha" id="fecha" class="form-control">
+        <br />
+        <label>¿Qué metas tiene para su vida?</label>
+        <input type="text" @bind="iglesiahermano.Metas" name="fecha" id="fecha" class="form-control">
+        <br />
+        <label>¿Cuenta con el respaldo de sus autoridades eclesiásticas para realizar estos estudios?</label>
+        <input type="text" @bind="iglesiahermano.RespaldoAutoridades" name="fecha" id="fecha" class="form-control">
+        <br />
+
+    </div>
+</form>
+
+@code {
+
+    string denominacion;
+    List<Iglesia> iglesia = new List<Iglesia>();
+
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+
+}

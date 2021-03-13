@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+@*<div class="sidebar">
+    <NavMenu />
+</div>*@
+<div class="main">
+    <div class="top-row px-4 auth">
+        <div class="font-weight-bolder dropleft">
+            <div href="">
+                <NavLink href="">
+                    <img src="./images.png" width="50" height="50" />
+                    Inicio
+                </NavLink>
+            </div>
+            
+        </div>
+        <LoginDisplay />
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+

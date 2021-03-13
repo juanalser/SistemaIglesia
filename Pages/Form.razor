@@ -1,0 +1,898 @@
+﻿@page "/Form"
+@using TareaIglesia.Data;
+@using TareaIglesia.Services
+@inject IglesiaServices service
+@inject HttpClient client
+@using Newtonsoft.Json;
+@using BlazorInputFile
+@using System.IO
+
+<form action="/action_page.php" class="was-validated">
+
+    <div>
+        <EditForm Model="@iglesia">
+            <div @onmousemove="GetUser">
+
+                <h2 id="header_3" class="form-check card-header text-center" data-component="header">
+                    Datos Personales
+                </h2>
+                <div class="container-fluid">
+                    <div>
+
+                        <label for="inputGroupFile01">Imagen</label>
+                        <div class="custom-file">                          
+                            @* <div class="custom-file">
+                        <input required type="file" class="custom-file-input" @bind-value="acc.Imagen" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="inputGroupFile01">Escoga la foto</label>
+                    </div>  *@
+                            @* <input required type="file" @bind-value="acc.Imagen" name="" id=""> *@
+                            <InputFile OnChange="HandleFileSelection" class="custom-file-input"  />
+<label class="custom-file-label" for="validatedCustomFile">Seleccion de imagen</label>
+                            <div class="valid-tooltip-feedback">Imagen seleccionada</div>
+                        </div>
+                        <form class="form-inline">
+                            <div class="form-group col-md-6">
+
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Apellidos</label>
+                                    <br />
+                                    <input required type="text" name="Apellido" id="Apellido" @bind="iglesiahermano.Apellido" class="form-control" placeholder="Apellido">
+                                    <div class="valid-feedback">Valido</div>
+
+                                </div>
+                                <br />
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label class="sr-only">Nombres</label>
+                                    <br />
+                                    <input  type="text" name="Nombre" id="Nombre" @bind="iglesiahermano.Nombre" class="form-control" placeholder="Nombre" required>
+                                    <div class="valid-feedback">Valido</div>
+
+                                </div>
+
+                            </div>
+                        </form>
+                            <div class="form-line" data-type="control_dropdown">
+                                <label>Sexo</label>
+                                <label>
+                                    <input  type="radio" value="Si" name="group"
+                                           checked="@(Sexo == "Hombre")"
+                                           @onclick="@(() => Sexo = "Hombre")" />Hombre
+
+                                </label>
+                                <label>
+                                    <label>
+                                        <input required type="radio" value="Si" name="group"
+                                               checked="@(Sexo == "Mujer")"
+                                               @onclick="@(() => Sexo = "Mujer")" />Mujer
+                                    </label>
+
+                                    @if (Sexo == "Hombre")
+                                    {
+                                        <input @bind="iglesiahermano.Sexo" style="visibility:hidden" />
+                                        iglesiahermano.Sexo = "Hombre";
+
+
+                                    }
+                                    @if (Sexo == "Mujer")
+                                    {
+                                        <input @bind="iglesiahermano.Sexo" style="visibility:hidden" />
+                                        iglesiahermano.Sexo = "Hombre";
+
+                                    }
+                                </label>
+                            </div>
+                            <div class="form-line" data-type="control_dropdown">
+                                <label>Fecha de Nacimiento</label>
+                                <input required type="date" @bind="iglesiahermano.FechaDeNacimiento" min="1900-01-01" max="2020-01-01" onkeydown="return false" @onclick="GetUser" name="fecha" id="fecha" class="form-control is-invalid">
+                                <div class="valid-feedback">Valido</div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Pais de Nacimiento</label>
+                                    <br />
+                                    <select required class="form-control is-invalid" @bind="iglesiahermano.PaisNacimiento" style="width:310px">
+                                        <option> </option>
+                                        @foreach (var user in Users)
+                                        {
+
+                                            <option value="@user.name">@user.name</option>
+                                        }
+                                    </select>
+
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Pais de residencia actual</label>
+                                    <br />
+                                    <select required class="form-control is-invalid" @bind="iglesiahermano.PaisActual" style="width:310px">
+                                        <option> </option>
+                                        @foreach (var user in Users)
+                                        {
+                                            <option value="@user.name">@user.name</option>
+                                        }
+                                    </select>
+
+
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Ciudad de Nacimiento</label>
+                            <input required type="text" class="form-control is-invalid" @bind="iglesiahermano.CiudadNacimiento" style="width:310px" size="310" />
+
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Ciudad de residencia actual</label>
+                            <input required type="text" class="form-control is-invalid" id="input_10" @bind="iglesiahermano.CiudadActual" style="width:310px" size="310" />
+
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label> Dirección (Provincia / sector / calle / No. de vivienda) </label>
+                        <div id="cid_11" class="form-input" data-layout="full">
+                            <textarea required class="form-control is-invalid" @bind="iglesiahermano.Direccion" rows="3" data-component="textarea"></textarea>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Teléfono</label>
+                        <input required type="text" class="form-control is-invalid" @bind="iglesiahermano.Telefono" style="width:310px" size="310" />
+
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Celular</label>
+                        <input required type="text" class="form-control is-invalid" id="input_10" @bind="iglesiahermano.Celular" style="width:310px" size="310" />
+
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Correo Electronico</label>
+                        <input required type="text" class="form-control is-invalid" @bind="iglesiahermano.Email" style="width:310px" size="310" />
+
+                    </div>
+                    <div class="form-group col-md-6" data-type="control_radio">
+                        <label class="form-label form-label-right form-label-auto"> Tipo de Documento de identidad: </label>
+                        <div class="form-input" data-layout="full">
+                            <div class="form-single-column" role="group" data-component="radio">
+                                <label>
+                                    <input required type="radio" value="Si" name="group2"
+                                           checked="@(TpDocumento == "Cédula")"
+                                           @onclick="@(() => TpDocumento = "Cédula")" />Cédula
+
+
+                                    <br />
+                                </label>
+                                <label>
+                                    <input required type="radio" value="Si" name="group2"
+                                           checked="@(TpDocumento == "Pasaporte")"
+                                           @onclick="@(() => TpDocumento = "Pasaporte")" />Pasaporte
+
+                                    <br />
+                                </label>
+                                <label>
+                                    <input required type="radio" value="Si" name="group2"
+                                           checked="@(TpDocumento == "DNI")"
+                                           @onclick="@(() => TpDocumento = "DNI")" />DNI
+
+                                    <br />
+                                    @if (TpDocumento == "Cédula")
+                                    {
+
+                                        iglesiahermano.TipoDocumentoIDentidad = "Cédula";
+
+
+                                    }
+                                    @if (TpDocumento == "Pasaporte")
+                                    {
+                                        iglesiahermano.TipoDocumentoIDentidad = "Pasaporte";
+
+
+                                    }
+                                    @if (TpDocumento == "DNI")
+                                    {
+                                        iglesiahermano.TipoDocumentoIDentidad = "DNI";
+
+
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                        @if (TpDocumento == "Cédula" || TpDocumento == "Pasaporte" || TpDocumento == "DNI")
+                        {
+                            <div class="text-monospace">
+                                <input class="form-group" @bind="iglesiahermano.DocumentoIdentidad" placeholder="Documento de identidad" />
+
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <form>
+
+                    <h2 id="header_3" class="form-check card-header text-center" data-component="header">
+                        Datos Familiares
+                    </h2>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Estado Civil</label>
+                            <br />
+                            <label>
+                                <input required type="radio" value="Si" name="group3"
+                                       checked="@(EstadoCiv == "Soltero")"
+                                       @onclick="@(() => EstadoCiv = "Soltero")" />Soltero
+                            </label>
+                            <label>
+                                <label>
+                                    <input required type="radio" value="Si" name="group3"
+                                           checked="@(EstadoCiv == "Casado")"
+                                           @onclick="@(() => EstadoCiv = "Casado")" />Casado
+                                </label>
+
+                                @if (EstadoCiv == "Soltero")
+                                {
+                                    iglesiahermano.EstadoCivil = "Soltero";
+                                    <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+
+
+                                }
+                                @if (EstadoCiv == "Casado")
+                                {
+                                    iglesiahermano.EstadoCivil = "Casado";
+                                    <input @bind="iglesiahermano.EstadoCivil" style="visibility:hidden" />
+
+
+                                }
+                            </label>
+                        </div>
+                        @if (EstadoCiv == "Casado")
+                        {
+                            <div class="text-body">
+                                <label>Nombre de esposo(a)</label>
+                                <input required type="text" @bind="iglesiahermano.NombreEsposo" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                            </div>
+                        }
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Hijos: </label>
+                            <br />
+                            <label>
+                                <input required type="radio" name="group4"
+                                       checked="@(Hijos == "Si")"
+                                       @onclick="@(() => Hijos = "Si")" />Si
+                            </label>
+                            <label>
+                                <label>
+                                    <input required type="radio" name="group4"
+                                           checked="@(Hijos == "No")"
+                                           @onclick="@(() => Hijos = "No")" />No
+                                </label>
+
+                                @if (Hijos == "Si")
+                                {
+
+                                    <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                                    iglesiahermano.Hijos = "Si";
+
+                                }
+                                @if (Hijos == "No")
+                                {
+                                    <input @bind="iglesiahermano.Hijos" style="visibility:hidden" />
+                                    iglesiahermano.Hijos = "No";
+
+
+                                }
+                            </label>
+                        </div>
+                        @if (Hijos == "Si")
+                        {
+                            <br />
+                            <div class="text-body">
+                                <label>Numero de hijos</label>
+                                <input  required type="number" @bind="iglesiahermano.NoHijos" class="form-control is-invalid" style="width:310px" size="310">
+                            </div>
+                        }
+                    </div>
+                </form>
+                <form>
+                    <h2 id="header_3" class="form-check card-header text-center" data-component="header">
+                        Datos Laborales
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Profesion</label>
+                            <input  required type="text" @bind="iglesiahermano.Profesion" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                            <label>Ocupación actual</label>
+                            <input required type="text" @bind="iglesiahermano.OcupacionActu" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Nombre de la empresa</label>
+                                <input required type="text" @bind="iglesiahermano.NombreEmpre" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                                <label>Teléfono</label>
+                                <input required type="text" @bind="iglesiahermano.TelefonoEmpre" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form>
+                    <div class="form-line" data-type="control_dropdown">
+                        <label>Fecha de conversión</label>
+                        <input required type="date" @bind="iglesiahermano.FechaDeConversion" min="1900-01-01" max="2020-01-01" onkeydown="return false" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                        <label>Fecha de bautismo</label>
+                        <input required type="date" @bind="iglesiahermano.Fechabautismo" min="1900-01-01" max="2020-01-01" onkeydown="return false" name="fecha" id="fecha" class="form-control is-invalid" style="width:310px" size="310">
+
+
+                        <label>Fecha en que	fue	aceptado(a) formalmente	como miembro de la Iglesia:</label>
+                        <input required type="date" style="width:310px" size="310" @bind="iglesiahermano.FechaAceptmiembro" min="1900-01-01" max="2020-01-01" onkeydown="return false" name="fecha" id="fecha" class="form-control is-invalid">
+
+
+                    </div>
+                    <label>Denominacion a la que pertenece</label>
+                    <div class="form-line" data-type="control_dropdown">
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Bautista")"
+                                   @onclick="@(() => denominacion = "Bautista")" />Bautista
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Pentecostal")"
+                                   @onclick="@(() => denominacion = "Pentecostal")" />Pentecostal
+                        </label>
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Metodista")"
+                                   @onclick="@(() => denominacion = "Metodista")" />Metodista
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Católica")"
+                                   @onclick="@(() => denominacion = "Católica")" />Católica
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Presbiteriana")"
+                                   @onclick="@(() => denominacion = "Presbiteriana")" />Presbiteriana
+                        </label>
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Adventista")"
+                                   @onclick="@(() => denominacion = "Adventista")" />Adventista
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Templo Bíblico")"
+                                   @onclick="@(() => denominacion = "Templo Bíblico")" />Templo Bíblico
+                        </label>
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Menonita")"
+                                   @onclick="@(() => denominacion = "Menonita")" />Menonita
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Luterana")"
+                                   @onclick="@(() => denominacion = "Luterana")" />Luterana
+                        </label>
+                        <label>
+                            <input required type="radio" name="group5"
+                                   checked="@(denominacion == "Otra")"
+                                   @onclick="@(() => denominacion = "Otra")" />Otra
+                        </label>
+
+                        @if (denominacion == "Bautista")
+                        {
+                            iglesiahermano.Denominacion = "Bautista";
+                            <input @bind="iglesiahermano.Denominacion" style="visibility:hidden" />
+
+                        }
+                        @if (denominacion == "Pentecostal")
+                        {
+                            iglesiahermano.Denominacion = "Pentecostal";
+                        }
+
+                        @if (denominacion == "Metodista")
+                        {
+                            iglesiahermano.Denominacion = "Metodista";
+                        }
+                        @if (denominacion == "Católica")
+                        {
+                            iglesiahermano.Denominacion = "Católica";
+                        }
+
+                        @if (denominacion == "Menonita")
+                        {
+                            iglesiahermano.Denominacion = "Menonita";
+                        }
+                        @if (denominacion == "Presbiteriana")
+                        {
+                            iglesiahermano.Denominacion = "Presbiteriana";
+                        }
+
+                        @if (denominacion == "Luterana")
+                        {
+                            iglesiahermano.Denominacion = "Luterana";
+                        }
+                        @if (denominacion == "Adventista")
+                        {
+                            iglesiahermano.Denominacion = "Adventista";
+                        }
+
+                        @if (denominacion == "Templo Bíblico")
+                        {
+                            iglesiahermano.Denominacion = "Templo Bíblico";
+                        }
+
+                        <br />
+                        @if (denominacion == "Otra")
+                        {
+                            <label>Otra:</label>
+                            <input required type="text" @bind="iglesiahermano.NoHijos" class="form-control is-invalid" style="width:310px" size="310">
+                            iglesiahermano.Denominacion = "Otra";
+                        }
+
+                    </div>
+
+                    <div>
+
+                        <label>Nombre de la iglesia a la que asiste acutalmente</label>
+                        <input required type="text" @bind="iglesiahermano.NombreIglesia" class="form-control is-invalid">
+
+
+                        <br />
+
+                        <label>Si asiste a esta iglesia por un tiempo menor a un año, ¿Dónde se congregaba antes?</label>
+                        <input required type="text" @bind="iglesiahermano.IglesiaAnterior" class="form-control is-invalid">
+
+
+                        <br />
+
+                        <label>Nombre del pastor de su iglesia actual</label>
+                        <input required type="text" @bind="iglesiahermano.Pastor" class="form-control is-invalid">
+
+
+                        <br />
+                    </div>
+                    <div>
+                        <label>¿Ha sido disciplinado alguna vez?   </label>
+                        <br />
+                        <label>
+                            <input required type="radio" name="group6"
+                                   checked="@(disciplinado == "Si")"
+                                   @onclick="@(() => disciplinado = "Si")" />Si
+                        </label>
+                        <label>
+                            <input required type="radio" name="group6"
+                                   checked="@(disciplinado == "No")"
+                                   @onclick="@(() => disciplinado = "No")" />No
+                        </label>
+                        @if (disciplinado == "Si")
+                        {
+                            <br />
+                            <div class="text-body">
+                                <label>¿Cuantas veces?</label>
+                                <input required type="number" @bind="iglesiahermano.Disciplina" class="form-control is-invalid" style="width:310px" size="310">
+                            </div>
+
+                            <br />
+                            <label>Causas: </label>
+                            <input required type="text" @bind="iglesiahermano.CausasDisciplina" class="form-control is-invalid">
+                            <br />
+
+                            iglesiahermano.Disciplina = "Si";
+                        }
+                        @if (disciplinado == "No")
+                        {
+                            iglesiahermano.Disciplina = "No";
+                        }
+
+
+
+                    </div>
+                    <div>
+                        <label>En la actualidad ocupa alguna de estas funciones</label>
+                        <br />
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Pastor")"
+                                   @onclick="@(() => Funcion = "Pastor")" />Pastor
+                        </label>
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Anciano")"
+                                   @onclick="@(() => Funcion = "Anciano")" />Anciano
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Diacono")"
+                                   @onclick="@(() => Funcion = "Diacono")" />Diacono
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Misionero")"
+                                   @onclick="@(() => Funcion = "Misionero")" />Misionero
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Escuela Dominical")"
+                                   @onclick="@(() => Funcion = "Lider Escuela Dominical")" />Lider Escuela Dominical
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Minist. de Jovenes")"
+                                   @onclick="@(() => Funcion = "Lider Minist. de Jovenes")" />Lider Minist. de Jovenes
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Minist. de Caballeros")"
+                                   @onclick="@(() => Funcion = "Lider Minist. de Caballeros")" />Lider Minist. de Caballeros
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Minist. de Damas")"
+                                   @onclick="@(() => Funcion = "Lider Minist. de Damas")" />Lider Minist. de Damas
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Minist. de Niños")"
+                                   @onclick="@(() => Funcion = "Lider Minist. de Niños")" />Lider Minist. de Niños
+                        </label>
+
+                        <br />
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider Minist. de matrimonios")"
+                                   @onclick="@(() => Funcion = "Lider Minist. de matrimonios")" />Lider Minist. de matrimonios
+                        </label>
+
+                        <label>
+                            <input required type="radio" name="group7"
+                                   checked="@(Funcion == "Lider de grupo pequeño (Célula)")"
+                                   @onclick="@(() => Funcion = "Lider de grupo pequeño (Célula)")" />Lider de grupo pequeño (Célula)
+                        </label>
+
+                        @if (Funcion == "Pastor")
+                        {
+                            iglesiahermano.FuncionIglesia = "Pastor";
+                        }
+
+                        @if (Funcion == "Anciano")
+                        {
+                            iglesiahermano.FuncionIglesia = "Anciano";
+                        }
+
+                        @if (Funcion == "Diacono")
+                        {
+                            iglesiahermano.FuncionIglesia = "Diacono";
+                        }
+
+                        @if (Funcion == "Misionero")
+                        {
+                            iglesiahermano.FuncionIglesia = "Misionero";
+                        }
+
+                        @if (Funcion == "Lider Escuela Dominical")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Escuela Dominical";
+                        }
+
+                        @if (Funcion == "Lider Minist. de Jovenes")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de Jovenes";
+                        }
+
+                        @if (Funcion == "Lider Minist. de Caballeros")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de Caballeros";
+                        }
+
+                        @if (Funcion == "Lider Minist. de Damas")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de Damas";
+                        }
+
+                        @if (Funcion == "Lider Minist. de Niños")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de Niños";
+                        }
+
+                        @if (Funcion == "Lider Minist. de matrimonios")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de matrimonios";
+                        }
+
+                        @if (Funcion == "Lider de grupo pequeño (Célula)")
+                        {
+                            iglesiahermano.FuncionIglesia = "Lider Minist. de matrimonios";
+                        }
+
+                    </div>
+
+                    <div>
+                        <label>¿Cuáles son los ministerios en los que ha servido?</label>
+                        <input required type="text" @bind="iglesiahermano.Ministerios" name="fecha" id="fecha" class="form-control is-invalid">
+
+
+                        <br />
+                        <label>¿En cuál de estos ministerios considera que tuvo mayor fruto? ¿Por qué?</label>
+                        <input required type="text" @bind="iglesiahermano.MinisteriosFruto" name="fecha" id="fecha" class="form-control is-invalid">
+
+
+                        <br />
+                        <label>Considerando sus dones y talentos, ¿a qué ministerio cree usted que Dios lo(a) está llamando?</label>
+                        <input required type="text" @bind="iglesiahermano.MinisterioDios" name="fecha" id="fecha" class="form-control is-invalid">
+
+
+                        <br />
+                        <label>¿Qué metas tiene para su vida?</label>
+                        <input required type="text" @bind="iglesiahermano.Metas" name="fecha" id="fecha" class="form-control is-invalid">
+
+
+                        <br />
+                        <label>¿Cuenta con el respaldo de sus autoridades eclesiásticas para realizar estos estudios?</label>
+                        <select  required class="form-control is-invalid" @bind="iglesiahermano.RespaldoAutoridades" style="width:310px">
+                            <option> --Selecciona--</option>
+                            <option> Si </option>
+                            <option> No </option>
+                        </select>
+
+
+                        <br />
+                        <h2 id="header_3" class="form-check card-header text-center" data-component="header">
+                            Datos Académicos
+                        </h2>
+                    </div>
+                </form>
+                <form>
+
+                    <label>Nivel de estudio</label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Primaria")"
+                               @onclick="@(() => Nivel = "Primaria")" />Primaria
+                    </label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Secundaria")"
+                               @onclick="@(() => Nivel = "Secundaria")" />Secundaria
+                    </label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Tecnico")"
+                               @onclick="@(() => Nivel = "Tecnico")" />Tecnico
+                    </label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Grado")"
+                               @onclick="@(() => Nivel = "Grado")" />Grado
+                    </label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Postgrado - Maestria")"
+                               @onclick="@(() => Nivel = "Postgrado - Maestria")" />Postgrado - Maestria
+                    </label>
+                    <label>
+                        <input required type="radio" name="group8"
+                               checked="@(Nivel == "Doctorado")"
+                               @onclick="@(() => Nivel = "Doctorado")" />Doctorado
+                    </label>
+                    @if (Nivel == "Primaria")
+                    {
+                        iglesiahermano.NivEstudio = "Primaria";
+                    }
+                    @if (Nivel == "Secundaria")
+                    {
+                        iglesiahermano.NivEstudio = "Secundaria";
+                    }
+                    @if (Nivel == "Tecnico")
+                    {
+                        iglesiahermano.NivEstudio = "Tecnico";
+                    }
+                    @if (Nivel == "Grado")
+                    {
+                        iglesiahermano.NivEstudio = "Grado";
+                    }
+                    @if (Nivel == "Doctorado")
+                    {
+                        iglesiahermano.NivEstudio = "Doctorado";
+                    }
+                    @if (Nivel == "Postgrado - Maestria")
+                    {
+                        iglesiahermano.NivEstudio = "Postgrado - Maestria";
+                    }
+                    <br />
+                    <label>¿Alguna vez ha sido expulsado o suspendido de alguna institución?</label>
+                    <br />
+                    <label>
+                        <input required type="radio" name="group9"
+                               checked="@(Expulsado == "Si")"
+                               @onclick="@(() => Expulsado = "Si")" />Si
+                    </label>
+                    <label>
+                        <input required type="radio" name="group9"
+                               checked="@(Expulsado == "No")"
+                               @onclick="@(() => Expulsado = "No")" />No
+                    </label>
+
+                </form>
+                @if (Expulsado == "No")
+                {
+                    iglesiahermano.Expulsado = "No";
+                }
+
+                <div>
+                    @if (Expulsado == "Si")
+                    {
+                        iglesiahermano.Expulsado = "Si";
+                        <label> ¿por qué razón? </label>
+                        <br />
+<textarea id="input_46" class="form-textarea" name="q46_enCual" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_46" @bind="iglesiahermano.RazonExpulsado"></textarea>
+
+
+                    }
+                </div>
+                <div class="text-center p-3 mb-3">
+                    <NavLink href="/Formulario">
+                        <button class="btn btn-info" @onclick="AddNewHermano"> Agregar Persona</button>
+
+                    </NavLink>
+
+                </div>
+
+            </div>
+        </EditForm>
+    </div>
+</form>
+@code {
+    bool cerrar = false;
+
+    List<Content> Users = new List<Content>();
+    private DateTime? selectedTime = DateTime.Now;
+    public DateTime Min = new DateTime(1990, 1, 1, 8, 15, 0);
+    public DateTime Max = new DateTime(2025, 1, 1, 19, 30, 45);
+
+    private async void GetUser()
+    {
+        var apiName = "https://raw.githubusercontent.com/millan2993/countries/master/json/countries.json";
+        var httpResponse = await client.GetAsync(apiName);
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            Response responseData = JsonConvert.DeserializeObject<Response>(await httpResponse.Content.ReadAsStringAsync());
+            Users = responseData.countries;
+            StateHasChanged();
+        }
+    }
+    string localDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
+
+
+
+    private async Task AddNewHermano()
+    {
+        {
+
+            iglesiahermano.foto = _fileBytes;
+            await service.AddHermanoAsync(iglesiahermano);
+            iglesiahermano = new Iglesia();
+            await Refreshiglesia();
+
+        }
+    }
+
+    public class Content
+    {
+        [JsonProperty("id")]
+        public string id { get; set; } = "";
+        [JsonProperty("name")]
+        public string name { get; set; } = "";
+    }
+    public class Response
+    {
+        [JsonProperty("countries")]
+        public List<Content> countries { get; set; }
+
+
+    }
+
+    //
+    List<Iglesia> iglesia = new List<Iglesia>();
+    Iglesia i = new Iglesia();
+    public Iglesia iglesiahermano { get; set; } = new Iglesia();
+    string Expulsado;
+    string Nivel;
+    string Funcion;
+    string disciplinado;
+    string denominacion;
+    string Sexo;
+    string TpDocumento;
+    string EstadoCiv;
+    string Hijos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refreshiglesia();
+    }
+    private async Task Refreshiglesia()
+    {
+        iglesia = await service.GetHermanoAsync();
+    }
+
+
+
+
+    IFileListEntry file = null;
+    public byte[] _fileBytes = null;
+    public int count = 0;
+
+    public async Task HandleFileSelection(IFileListEntry[] files)
+    {
+        if (files.Count() > 0)
+        {
+            file = files.FirstOrDefault();
+            using (var ms = new MemoryStream())
+            {
+                await file.Data.CopyToAsync(ms);
+                _fileBytes = ms.ToArray();
+            }
+        }
+    }
+    public byte[] getImage(string sBase64String)
+    {
+        byte[] bytes = null;
+        if (sBase64String != null)
+        {
+            bytes = Convert.FromBase64String(sBase64String);
+        }
+
+        return bytes;
+    }
+
+}
+
